@@ -18,3 +18,8 @@ body {
   background-color: black;
   color: white;
 }
+
+.sliderImg {
+  height: 620px;
+  object-fit: cover;
+}
