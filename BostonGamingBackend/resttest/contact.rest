@@ -1,0 +1,47 @@
+@port = 5039
+@route = contact
+
+
+### GET - hent alle - ADMIN
+
+GET http://localhost:{{port}}/{{route}}/admin
+
+
+
+### GET - hent ud fra ID - ADMIN
+
+GET http://localhost:{{port}}/{{route}}/admin/5f95c8ed0841c14f6c050186
+
+
+
+### POST - opret ny - ej ADMIN (brugere skal kunne sende en besked uden login)
+
+POST http://localhost:{{port}}/{{route}}
+content-type: application/json
+
+{
+    "name": "Hans Hansen",
+    "email": "email@email",
+    "phonenumber": "0000000",
+    "message": "Ny besked her"
+}
+
+
+
+### DELETE - slet ud fra ID
+
+DELETE http://localhost:{{port}}/{{route}}/admin/5f95c8ed0841c14f6c050186
+
+
+### INGEN PUT - ret - da det ikke giver mening at man kan rette i en brugers besked
+
+
+### PATCH - til at styre om en besked er læst eller ulæst 
+### true el. false (true=read/læst, false=unread/ikke læst)
+
+PATCH http://localhost:{{port}}/{{route}}/admin/5f9e93ad2d730f48cc13286d
+content-type: application/json
+
+{
+    "read": true
+}

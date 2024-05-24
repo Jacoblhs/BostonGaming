@@ -1,0 +1,42 @@
+@port = 5039
+@route = slider
+
+
+### GET - hent alle
+
+GET http://localhost:{{port}}/{{route}}
+
+
+
+### GET - hent ud fra ID
+
+GET http://localhost:{{port}}/{{route}}/5f6f94abde3bc7906834c234
+
+
+
+### POST - opret ny
+
+POST http://localhost:{{port}}/{{route}}/admin
+content-type: application/json
+
+{
+    "alttext": "Lille, hurtig og fræk - prisen er helt i bund netop nu"
+}
+
+
+
+### PUT - ret 
+
+PUT http://localhost:{{port}}/{{route}}/admin/5f95dc79595ad72688f95516
+content-type: application/json
+
+{
+    "alttext": "Rettet alt-text"
+}
+
+
+
+
+### DELETE - slet ud fra ID
+
+DELETE http://localhost:{{port}}/{{route}}/admin/5f95dd0f595ad72688f95519

@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"bostongaming.users"},{"v":2,"unique":true,"key":{"email":1},"name":"email_1","ns":"bostongaming.users","background":true}],"uuid":"fd273518e47740c98ee03015da80a936"}

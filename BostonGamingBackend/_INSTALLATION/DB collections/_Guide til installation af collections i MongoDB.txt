@@ -1,0 +1,36 @@
+
+//// Restore data til MongoDB
+
+1. Opret en mappe med fx navnet "mongodb" på C-drevet (VIGTIGT - det SKAL være på c-drevet) -> C:\mongodb
+
+2. kopier bostongaming-mappen (ligger i mappen her) ind i mongodb-mappen på C-drevet
+
+3. Find stien til bin-mappen i MongoDBs Tools-mappe*  - den ser nok ca. sådan her ud: 
+    
+    C:\Program Files\MongoDB\Tools\100\bin
+    
+    *(gælder for nyere versioner - der er en anden måde i ældre versioner, når der ikke er en Tools-mappe, så sig til, hvis du ikke kan finde en Tools-mappe)
+
+4. Marker og kopier stien til din bin-mappe, så du har hele stien i udklipsholderen
+
+5. Åbn "CMD" (skriv cmd i Start og tryk ENTER)
+
+6. Skriv "cd" og paste/indsæt stien fra udklipsholderen - så det ser ca. sådan her ud:    
+
+	cd C:\Program Files\MongoDB\Tools\100\bin
+   
+
+7. Tryk ENTER - og tjek, at du nu står inde i bin-mappen i cmd-vinduet
+
+8. Kopier kommandoen herunder (vær omhyggelig med at få det hele med):
+
+    mongorestore -d runit C:\mongodb\runit
+    
+
+9. Paste/indsæt kommandoen (du skal stadig være i bin-mappen) og tryk ENTER
+
+10. Nu burde MongoDB restore databasen i din mongoDB
+
+11. Åbn MongoDB (localhost)
+
+12. Tryk på refresh og tjek, at den nye database er oprettet, og at der er collections med documents og data import

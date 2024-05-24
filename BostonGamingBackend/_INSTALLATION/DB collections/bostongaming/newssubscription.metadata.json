@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"bostongaming.newssubscription"},{"v":2,"unique":true,"key":{"email":1},"name":"email_1","ns":"bostongaming.newssubscription","background":true}],"uuid":"1c01af7fb9a7462988ac283136c5188b"}

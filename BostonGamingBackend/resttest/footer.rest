@@ -1,0 +1,23 @@
+@port = 5039
+@route = footer
+
+## OBS! 
+## Der må kun være 1 forekomst af email i databasen = der kan ikke oprettes en bruger som har samme email som en anden bruger.
+
+### GET - hent about (kun 1 about)
+
+GET http://localhost:{{port}}/{{route}}
+
+
+
+### PUT - ret 
+
+PUT http://localhost:{{port}}/{{route}}/admin/
+content-type: application/json
+
+{
+    "about": "Boston Gaming is a small newly founded company, driven by the passion of custom pc builds.",
+    "location": "Duevej 851"
+}
+
+

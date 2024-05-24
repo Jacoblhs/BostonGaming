@@ -1,0 +1,3 @@
+Eksempel på hvordan man kan forny session med Date():
+https://www.codota.com/code/javascript/functions/express/Request/session
+

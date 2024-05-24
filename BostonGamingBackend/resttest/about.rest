@@ -1,0 +1,24 @@
+@port = 5039
+@route = about
+
+## OBS! 
+## Der må kun være 1 forekomst af email i databasen = der kan ikke oprettes en bruger som har samme email som en anden bruger.
+
+### GET - hent about (kun 1 about)
+
+GET http://localhost:{{port}}/{{route}}
+
+
+
+### PUT - ret 
+
+PUT http://localhost:{{port}}/{{route}}/admin/
+content-type: application/json
+
+{
+    "content1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam pulvinar, justo in feugiat pretium, magna lacus blandit elit, sed sagittis elit purus a mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin nec mollis velit. Vivamus pellentesque nunc sapien, vitae dignissim sapien ultricies et. Donec ac ante posuere, fringilla metus nec, finibus leo.",
+    "content2": "Aliquam venenatis dignissim sodales. Praesent eget sodales eros. Nullam ultricies quis odio a mollis. Curabitur scelerisque leo sem, in sagittis est efficitur nec. Duis quis lacus eu magna faucibus tempor. Donec placerat congue venenatis. Curabitur egestas nibh orci, ut auctor nunc aliquam vel."
+
+}
+
+

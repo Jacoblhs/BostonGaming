@@ -1,0 +1,48 @@
+@port = 5039
+@route = user
+
+## OBS! 
+## Der må kun være 1 forekomst af email i databasen = der kan ikke oprettes en bruger som har samme email som en anden bruger.
+
+### GET - hent alle
+
+GET http://localhost:{{port}}/{{route}}/admin
+
+
+
+### GET - hent ud fra ID
+
+GET http://localhost:{{port}}/{{route}}/admin/5f6f94abde3bc7906834c234
+
+
+
+### POST - opret ny
+
+POST http://localhost:{{port}}/{{route}}/admin
+content-type: application/json
+
+{
+    "name": "Ny user",
+    "email": "ny@testmail.dk",
+    "password": "xxxxxxxxxx"
+}
+
+
+
+### PUT - ret 
+
+PUT http://localhost:{{port}}/{{route}}/admin/5f95b8382920897a104fd28e
+content-type: application/json
+
+{
+    "name": "Rettet user",
+    "email": "rettet@testmail.dk",
+    "password": "xxxxxxxxxx"
+}
+
+
+
+
+### DELETE - slet ud fra ID
+
+DELETE http://localhost:{{port}}/{{route}}/admin/5f95b8d364cbcc53c4cea376
