@@ -6,10 +6,12 @@ import DesignYourOwn from './views/DesignYourOwn'
 import About from './views/About'
 import Contact from './views/Contact'
 import Footer from './components/Footer'
+import ScrollToTopButton from './hooks/ScrollToTop/ScrollToTop'
 
 const App = () => {
   return (
     <>
+    
     <Header></Header>
     <main>
     <Home></Home>
@@ -19,6 +21,7 @@ const App = () => {
     <Contact></Contact>
     </main>
     <Footer></Footer>
+    <ScrollToTopButton></ScrollToTopButton>
     </>
   )
 }
