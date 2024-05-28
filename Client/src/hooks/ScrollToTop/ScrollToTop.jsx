@@ -8,7 +8,7 @@ const ScrollToTopButton = () => {
     <>
       {showScroll && (
         <button
-          className='fixed bottom-10 right-10 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow'
+          className='fixed bottom-10 right-10 bg-white hover:bg-zinc-600 text-black hover:text-white font-bold py-2 px-4 rounded-full shadow'
           onClick={scrollTop}
           title="Scroll To Top"
         >

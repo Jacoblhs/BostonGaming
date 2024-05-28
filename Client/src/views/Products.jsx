@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useRequestData from '../hooks/useRequestData';
 import ProductModal from '../components/ProductModal';
-import ManageProductsModal from '../components/ManageProductsModal';
 import CategoryModal from '../components/CategoryModal';
 import { FaStar } from 'react-icons/fa';
 
@@ -9,7 +8,6 @@ const Products = () => {
   const { data: products, isLoading, error, makeRequest } = useRequestData();
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showManageProductsModal, setShowManageProductsModal] = useState(false);
 
   useEffect(() => {
     makeRequest('http://localhost:5039/product', 'GET');
@@ -40,20 +38,10 @@ const Products = () => {
           Manage Categories
         </button>
 
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded ml-4"
-          onClick={() => setShowManageProductsModal(true)}
-        >
-          Manage Products
-        </button>
       </div>
 
       {showCategoryModal && (
         <CategoryModal onClose={() => setShowCategoryModal(false)} />
-      )}
-
-      {showManageProductsModal && (
-        <ManageProductsModal onClose={() => setShowManageProductsModal(false)} makeRequest={makeRequest} />
       )}
 
       {isLoading && <p>Loading...</p>}
