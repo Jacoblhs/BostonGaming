@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import useRequestData from '../hooks/useRequestData';
 import ProductModal from '../components/ProductModal';
 import CategoryModal from '../components/CategoryModal';
+import ManageProducts from '../components/ManageProducts';
 import { FaStar } from 'react-icons/fa';
 
 const Products = () => {
   const { data: products, isLoading, error, makeRequest } = useRequestData();
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showManageProductsModal, setShowManageProductsModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
@@ -37,11 +39,20 @@ const Products = () => {
         >
           Manage Categories
         </button>
-
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+          onClick={() => setShowManageProductsModal(true)}
+        >
+          Manage Products
+        </button>
       </div>
 
       {showCategoryModal && (
         <CategoryModal onClose={() => setShowCategoryModal(false)} />
+      )}
+
+      {showManageProductsModal && (
+        <ManageProducts onClose={() => setShowManageProductsModal(false)} />
       )}
 
       {isLoading && <p>Loading...</p>}
