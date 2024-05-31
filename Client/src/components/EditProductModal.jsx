@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import useRequestData from "../hooks/useRequestData";
-import mongoose from "mongoose";
 
 const EditProductModal = ({ product, onClose }) => {
   const { data: categories = [], makeRequest } = useRequestData();
+  const predefinedImages = ["paavej.jpg", "pc1.jpg"];
   const [editedProduct, setEditedProduct] = useState({
     title: product.title,
     content: product.content,
     category: product.category,
     productimage: product.productimage,
   });
+  const [newImageFile, setNewImageFile] = useState(null);
+  const [uploadedImages, setUploadedImages] = useState(predefinedImages);
 
   useEffect(() => {
     makeRequest("http://localhost:5039/category", "GET");
@@ -30,17 +32,39 @@ const EditProductModal = ({ product, onClose }) => {
       category: checked ? value : null,
     }));
   };
-  
+
+  const handleFileChange = (e) => {
+    setNewImageFile(e.target.files[0]);
+  };
+
   const handleSave = async () => {
     try {
-      // Convert category string to ObjectId
-      const categoryId = mongoose.Types.ObjectId(editedProduct.category);
+      let imageUrl = editedProduct.productimage;
+
+      // If a new image file is selected, upload it
+      if (newImageFile) {
+        const formData = new FormData();
+        formData.append("productimage", newImageFile);
+
+        const response = await fetch("http://localhost:5039/images/product/", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          imageUrl = data.imageUrl; // Assuming the response contains the imageUrl
+          setUploadedImages((prevImages) => [...prevImages, data.imageUrl]);
+        } else {
+          throw new Error("Image upload failed");
+        }
+      }
 
       const updatedProduct = {
         title: editedProduct.title,
         content: editedProduct.content,
-        category: categoryId,
-        productimage: editedProduct.productimage,
+        category: editedProduct.category,
+        productimage: imageUrl,
       };
 
       await makeRequest(
@@ -50,7 +74,6 @@ const EditProductModal = ({ product, onClose }) => {
       );
       onClose();
     } catch (error) {
-      // Handle errors
       console.error("Error:", error);
     }
   };
@@ -82,12 +105,23 @@ const EditProductModal = ({ product, onClose }) => {
         <div className="mb-4">
           <label className="text-gray-300 block mb-2">Product Image</label>
           <input
-            type="text"
+            type="file"
+            name="productimage"
+            onChange={handleFileChange}
+            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 mb-2"
+          />
+          <label className="text-gray-300 block mb-2">Or select from existing images</label>
+          <select
             name="productimage"
             value={editedProduct.productimage}
             onChange={handleInputChange}
             className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
-          />
+          >
+            <option value="">Select an image</option>
+            {uploadedImages.map((image) => (
+              <option key={image} value={image}>{image}</option>
+            ))}
+          </select>
         </div>
         <div className="mb-4">
           <label className="text-gray-300 block mb-2">Category</label>

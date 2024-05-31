@@ -11,7 +11,7 @@ const ProductModal = ({ product, onClose }) => {
           className="w-full h-auto mb-2 rounded"
         />
         <p className="mb-2"><strong>Description:</strong> {product.content}</p>
-        <p className="mb-2"><strong>Category:</strong> {product.category}</p>
+        <p className="mb-2"><strong>Category:</strong> {product.category.title}</p>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={onClose}

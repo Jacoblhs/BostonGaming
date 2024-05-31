@@ -20,7 +20,7 @@ const ManageProducts = ({ onClose }) => {
     const defaultProduct = {
       title: 'Nyt produkts title her',
       content: 'Produktets beskrivelse her',
-      category: '5f95c7b29c318e74c0590ac1',
+      category: '66558ba0167ba22990e7483f',
       productimage: 'paavej.jpg',
     };
     await makeRequest('http://localhost:5039/product/admin', 'POST', defaultProduct);
