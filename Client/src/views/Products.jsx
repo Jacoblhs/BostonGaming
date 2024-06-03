@@ -23,6 +23,10 @@ const Products = () => {
     setSelectedProduct(null);
   };
 
+  const handleRefreshProducts = () => {
+    makeRequest('http://localhost:5039/product', 'GET');
+  };
+
   return (
     <section id="products">
       <h2 className="uppercase font-bold text-4xl text-center mt-4 mb-2">Products</h2>
@@ -52,7 +56,7 @@ const Products = () => {
       )}
 
       {showManageProductsModal && (
-        <ManageProducts onClose={() => setShowManageProductsModal(false)} />
+        <ManageProducts onClose={() => setShowManageProductsModal(false)} onProductsUpdated={handleRefreshProducts} />
       )}
 
       {isLoading && <p>Loading...</p>}

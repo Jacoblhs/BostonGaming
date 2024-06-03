@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useRequestData from '../hooks/useRequestData';
 import EditProductModal from '../components/EditProductModal';
 
-const ManageProducts = ({ onClose }) => {
+const ManageProducts = ({ onClose, onProductsUpdated }) => {
   const { data: products = [], isLoading, error, makeRequest } = useRequestData();
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -35,6 +35,7 @@ const ManageProducts = ({ onClose }) => {
   const handleCloseEditModal = () => {
     setSelectedProduct(null);
     makeRequest('http://localhost:5039/product', 'GET');
+    onProductsUpdated(); // Notify parent component to refresh products
   };
 
   return (
@@ -53,7 +54,10 @@ const ManageProducts = ({ onClose }) => {
           </button>
           <button 
             className="bg-blue-500 text-white px-4 py-2 rounded" 
-            onClick={onClose}
+            onClick={() => {
+              onClose();
+              onProductsUpdated(); // Notify parent component to refresh products
+            }}
           >
             Close
           </button>
