@@ -1,160 +1,135 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useRequestData from "../hooks/useRequestData";
 
-const EditProductModal = ({ product, onClose }) => {
-  const { data: categories = [], makeRequest } = useRequestData();
-  const predefinedImages = ["paavej.jpg", "pc1.jpg"];
-  const [editedProduct, setEditedProduct] = useState({
-    title: product.title,
-    content: product.content,
-    category: product.category,
-    productimage: product.productimage,
-  });
-  const [newImageFile, setNewImageFile] = useState(null);
-  const [uploadedImages, setUploadedImages] = useState(predefinedImages);
+const SliderModal = ({ onClose, onSliderUpdate }) => {
+  const { data, isLoading, error, makeRequest } = useRequestData();
+  const [newSlider, setNewSlider] = useState({ alttext: "", sliderimage: null });
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentSlider, setCurrentSlider] = useState(null);
+
+  const fetchSliders = useCallback(async () => {
+    await makeRequest("http://localhost:5039/slider", "GET");
+  }, [makeRequest]);
 
   useEffect(() => {
-    makeRequest("http://localhost:5039/category", "GET");
-  }, [makeRequest]);
+    fetchSliders();
+  }, [fetchSliders]);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "productimage" && files) {
-      setNewImageFile(files[0]);
+    const imageFile = files ? files[0] : null;
+    setNewSlider((prev) => ({ ...prev, [name]: value, sliderimage: imageFile }));
+  };
+
+  const handleCreateOrUpdate = async () => {
+    const formData = new FormData();
+    formData.append("alttext", newSlider.alttext);
+    formData.append("sliderimage", newSlider.sliderimage);
+
+    if (isEditing && currentSlider) {
+      await makeRequest(`http://localhost:5039/slider/admin/${currentSlider._id}`, "PUT", formData);
     } else {
-      setEditedProduct((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    setEditedProduct((prevState) => ({
-      ...prevState,
-      category: checked ? value : null,
-    }));
-  };
-
-  const handleSave = async () => {
-    try {
-      let imageUrl = editedProduct.productimage;
-
-      if (newImageFile) {
-        const formData = new FormData();
-        formData.append("productimage", newImageFile);
-
-        const response = await fetch("http://localhost:5039/images/product", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          imageUrl = data.imageUrl;
-          setUploadedImages((prevImages) => [...prevImages, data.imageUrl]);
-        } else {
-          throw new Error("Image upload failed");
-        }
+      if (!newSlider.sliderimage) {
+        // Handle case where no image is selected
+        return;
       }
-
-      const updatedProduct = {
-        ...editedProduct,
-        productimage: imageUrl,
-      };
-
-      await makeRequest(
-        `http://localhost:5039/product/admin/${product._id}`,
-        "PUT",
-        updatedProduct
-      );
-
-      onClose();
-    } catch (error) {
-      console.error("Error:", error);
+      await makeRequest("http://localhost:5039/slider/admin", "POST", formData);
     }
+    await onSliderUpdate();
+    resetForm();
+    fetchSliders();
+  };
+
+  const handleEdit = (slider) => {
+    setIsEditing(true);
+    setCurrentSlider(slider);
+    setNewSlider({ alttext: slider.alttext, sliderimage: null });
+  };
+
+  const handleDelete = async (id) => {
+    await makeRequest(`http://localhost:5039/slider/admin/${id}`, "DELETE");
+    await onSliderUpdate();
+    fetchSliders();
+  };
+
+  const resetForm = () => {
+    setIsEditing(false);
+    setCurrentSlider(null);
+    setNewSlider({ alttext: "", sliderimage: null });
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-gray-900 p-6 rounded-lg w-3/4 max-w-lg">
-        <h2 className="text-white text-xl mb-4">Edit Product</h2>
-        <div className="mb-4">
-          <label className="text-gray-300 block mb-2">Title</label>
-          <input
-            type="text"
-            name="title"
-            value={editedProduct.title}
-            onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="text-gray-300 block mb-2">Content</label>
-          <input
-            type="text"
-            name="content"
-            value={editedProduct.content}
-            onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="text-gray-300 block mb-2">Product Image</label>
-          <input
-            type="file"
-            name="productimage"
-            accept="image/*"
-            onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 mb-2"
-          />
-          <label className="text-gray-300 block mb-2">Or select from existing images</label>
-          <select
-            name="productimage"
-            value={editedProduct.productimage}
-            onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
-          >
-            <option value="">Select an image</option>
-            {uploadedImages.map((image) => (
-              <option key={image} value={image}>{image}</option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="text-gray-300 block mb-2">Category</label>
-          {Array.isArray(categories) &&
-            categories.map((category) => (
-              <div key={category._id} className="flex items-center space-x-2 mb-2">
-                <input
-                  type="checkbox"
-                  value={category._id}
-                  checked={editedProduct.category === category._id}
-                  onChange={handleCheckboxChange}
-                  className="form-checkbox h-5 w-5 text-indigo-600 bg-gray-700 border-gray-600"
-                />
-                <span className="text-gray-300">{category.title}</span>
-              </div>
-            ))}
-        </div>
-        <div className="flex justify-between">
-          <button
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-            onClick={handleSave}
-          >
-            Save
-          </button>
-          <button
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-        </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-gray-800 p-8 rounded shadow-lg w-96 text-white">
+        <h2 className="text-2xl mb-4">{isEditing ? "Edit Slider" : "Add New Slider"}</h2>
+        <input
+          type="text"
+          name="alttext"
+          value={newSlider.alttext}
+          onChange={handleInputChange}
+          placeholder="Alt Text"
+          className="w-full mb-4 p-2 border border-gray-600 bg-gray-700 text-white"
+        />
+        <input
+          type="file"
+          name="sliderimage"
+          accept="image/*"
+          onChange={handleInputChange}
+          className="w-full mb-4 p-2 border border-gray-600 bg-gray-700 text-white"
+          multiple
+        />
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+          onClick={handleCreateOrUpdate}
+        >
+          {isEditing ? "Update" : "Add"}
+        </button>
+        <button
+          className="bg-gray-500 text-white px-4 py-2 rounded"
+          onClick={onClose}
+        >
+          Close
+        </button>
+        <h3 className="text-xl mt-4">Existing Sliders</h3>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <ul>
+            {data && data.length > 0 ? (
+              data.map((slider) => (
+                <li key={slider._id} className="flex justify-between items-center my-2">
+                  <img
+                    src={`http://localhost:5039/images/slider/${slider.sliderimage}`}
+                    alt={slider.alttext}
+                    className="w-16 h-16 object-cover"
+                  />
+                  <span className="flex-1 mx-2">{slider.alttext}</span>
+                  <div>
+                    <button
+                      className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                      onClick={() => handleEdit(slider)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                      onClick={() => handleDelete(slider._id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <p>No sliders available.</p>
+            )}
+          </ul>
+        )}
       </div>
     </div>
   );
 };
 
-export default EditProductModal;
+export default SliderModal;
