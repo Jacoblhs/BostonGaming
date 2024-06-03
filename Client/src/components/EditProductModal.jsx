@@ -3,7 +3,6 @@ import useRequestData from "../hooks/useRequestData";
 
 const EditProductModal = ({ product, onClose }) => {
   const { data: categories = [], makeRequest } = useRequestData();
-  const predefinedImages = ["paavej.jpg", "pc1.jpg"];
   const [editedProduct, setEditedProduct] = useState({
     title: product.title,
     content: product.content,
@@ -11,7 +10,6 @@ const EditProductModal = ({ product, onClose }) => {
     productimage: product.productimage,
   });
   const [newImageFile, setNewImageFile] = useState(null);
-  const [uploadedImages, setUploadedImages] = useState(predefinedImages);
 
   useEffect(() => {
     makeRequest("http://localhost:5039/category", "GET");
@@ -39,39 +37,27 @@ const EditProductModal = ({ product, onClose }) => {
 
   const handleSave = async () => {
     try {
-      let imageUrl = editedProduct.productimage;
+      const formData = new FormData();
+      formData.append("title", editedProduct.title);
+      formData.append("content", editedProduct.content);
+      formData.append("category", editedProduct.category);
 
       // If a new image file is selected, upload it
       if (newImageFile) {
-        const formData = new FormData();
         formData.append("productimage", newImageFile);
-
-        const response = await fetch("http://localhost:5039/images/product/", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          imageUrl = data.imageUrl; // Assuming the response contains the imageUrl
-          setUploadedImages((prevImages) => [...prevImages, data.imageUrl]);
-        } else {
-          throw new Error("Image upload failed");
-        }
+      } else {
+        formData.append("productimage", editedProduct.productimage);
       }
 
-      const updatedProduct = {
-        title: editedProduct.title,
-        content: editedProduct.content,
-        category: editedProduct.category,
-        productimage: imageUrl,
-      };
+      const response = await fetch(`http://localhost:5039/product/admin/${product._id}`, {
+        method: "PUT",
+        body: formData,
+      });
 
-      await makeRequest(
-        `http://localhost:5039/product/admin/${product._id}`,
-        "PUT",
-        updatedProduct
-      );
+      if (!response.ok) {
+        throw new Error("Failed to update product");
+      }
+
       onClose();
     } catch (error) {
       console.error("Error:", error);
@@ -110,18 +96,6 @@ const EditProductModal = ({ product, onClose }) => {
             onChange={handleFileChange}
             className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 mb-2"
           />
-          <label className="text-gray-300 block mb-2">Or select from existing images</label>
-          <select
-            name="productimage"
-            value={editedProduct.productimage}
-            onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
-          >
-            <option value="">Select an image</option>
-            {uploadedImages.map((image) => (
-              <option key={image} value={image}>{image}</option>
-            ))}
-          </select>
         </div>
         <div className="mb-4">
           <label className="text-gray-300 block mb-2">Category</label>
