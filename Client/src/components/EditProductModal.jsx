@@ -66,7 +66,7 @@ const EditProductModal = ({ product, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-gray-900 p-6 rounded-lg w-3/4 max-w-lg">
+      <div className="bg-zinc-900 p-6 rounded-lg w-3/4 max-w-lg">
         <h2 className="text-white text-xl mb-4">Edit Product</h2>
         <div className="mb-4">
           <label className="text-gray-300 block mb-2">Title</label>
@@ -75,7 +75,7 @@ const EditProductModal = ({ product, onClose }) => {
             name="title"
             value={editedProduct.title}
             onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+            className="w-full p-2 rounded bg-gray-700 text-white border border-zinc-600"
           />
         </div>
         <div className="mb-4">
@@ -85,7 +85,7 @@ const EditProductModal = ({ product, onClose }) => {
             name="content"
             value={editedProduct.content}
             onChange={handleInputChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600"
+            className="w-full p-2 rounded bg-zinc-700 text-white border border-zinc-600"
           />
         </div>
         <div className="mb-4">
@@ -94,7 +94,7 @@ const EditProductModal = ({ product, onClose }) => {
             type="file"
             name="productimage"
             onChange={handleFileChange}
-            className="w-full p-2 rounded bg-gray-700 text-white border border-gray-600 mb-2"
+            className="w-full p-2 rounded bg-zinc-700 text-white border border-zinc-600 mb-2"
           />
         </div>
         <div className="mb-4">
@@ -110,7 +110,7 @@ const EditProductModal = ({ product, onClose }) => {
                   value={category._id}
                   checked={editedProduct.category === category._id}
                   onChange={handleCheckboxChange}
-                  className="form-checkbox h-5 w-5 text-indigo-600 bg-gray-700 border-gray-600"
+                  className="form-checkbox h-5 w-5 text-indigo-600 bg-zinc-700 border-zinc-600"
                 />
                 <span className="text-gray-300">{category.title}</span>
               </div>

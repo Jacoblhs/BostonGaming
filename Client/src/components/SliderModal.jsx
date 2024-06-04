@@ -60,7 +60,7 @@ const SliderModal = ({ onClose, onSliderUpdate }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-gray-800 p-8 rounded shadow-lg w-96 text-white">
+      <div className="bg-zinc-800 p-8 rounded shadow-lg w-96 text-white">
         <h2 className="text-2xl mb-4">{isEditing ? "Edit Slider" : "Add New Slider"}</h2>
         <input
           type="text"

@@ -40,7 +40,7 @@ const ManageProducts = ({ onClose, onProductsUpdated }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-gray-800 p-4 rounded w-3/4 max-w-lg">
+      <div className="bg-zinc-800 p-4 rounded w-3/4 max-w-lg">
         <h2 className="text-white text-xl mb-4">Manage Products</h2>
         {isLoading && <p className="text-white">Loading...</p>}
         {error && <p className="text-red-500">{error}</p>}
@@ -65,7 +65,7 @@ const ManageProducts = ({ onClose, onProductsUpdated }) => {
 
         <div className="flex flex-col space-y-4">
           {Array.isArray(products) && products.map(product => (
-            <div key={product._id} className="flex items-center justify-between bg-gray-700 p-2 rounded">
+            <div key={product._id} className="flex items-center justify-between bg-zinc-700 p-2 rounded">
               <div className="flex items-center space-x-4">
                 <img 
                   src={`http://localhost:5039/images/product/${product.productimage}`} 
